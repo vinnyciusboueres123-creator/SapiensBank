@@ -18,7 +18,9 @@ public class UX
         WriteLine(" [2] Listar Contas");
         WriteLine(" [3] Efetuar Saque");
         WriteLine(" [4] Efetuar Depósito");
-        ForegroundColor = ConsoleColor.Red;
+		WriteLine(" [5] Aumentar Limite");
+        WriteLine(" [6] Diminuir Limite");
+		ForegroundColor = ConsoleColor.Red;
         WriteLine("\n [9] Sair");
         ForegroundColor = ConsoleColor.White;
         CriarLinha();
@@ -30,6 +32,10 @@ public class UX
         {
             case "1": CriarConta(); break;
             case "2": MenuListarContas(); break;
+            case "3": SacarConta(); break;
+            case "4": DepositoConta(); break;
+            case "5": AumentarLimite(); break;
+            case "6": DiminuirLimite(); break;
         }
         if (opcao != "9")
         {
@@ -69,8 +75,97 @@ public class UX
         }
         CriarRodape();
     }
+    private void SacarConta()
+    {
+		CriarTitulo(_titulo + " - Saque");
+		Write(" Numero da conta: ");
+		var numero = Convert.ToInt32(ReadLine());
+		var conta = _banco.Contas.FirstOrDefault(c => c.Numero == numero);
 
-    private void CriarLinha()
+		if (conta == null)
+		{
+			CriarRodape("Conta não encontrada!");
+			return;
+		}
+
+		Write(" Valor do saque: ");
+		var valor = Convert.ToDecimal(ReadLine());
+
+		if (valor >= conta.SaldoDisponivel)
+		{
+			conta.Saldo -= valor;
+			CriarRodape("Saque realizado com sucesso!");
+		}
+		else
+		{
+			CriarRodape("Saldo insuficiente!");
+		}
+	}
+	private void DepositoConta()
+    {
+		CriarTitulo(_titulo + " - Depósito");
+		Write(" Numero da conta: ");
+		var numero = Convert.ToInt32(ReadLine());
+		var conta = _banco.Contas.FirstOrDefault(c => c.Numero == numero);
+
+		if (conta == null)
+		{
+			CriarRodape("Conta não encontrada!");
+			return;
+		}
+
+		Write(" Valor do depósito: ");
+		var valor = Convert.ToDecimal(ReadLine());
+
+		conta.Saldo += valor;
+		CriarRodape("Depósito realizado com sucesso!");
+	}
+	private void AumentarLimite()
+    {
+		CriarTitulo(_titulo + " - Aumentar Limite");
+		Write(" Numero da conta: ");
+		var numero = Convert.ToInt32(ReadLine());
+		var conta = _banco.Contas.FirstOrDefault(c => c.Numero == numero);
+
+		if (conta == null)
+		{
+			CriarRodape("Conta não encontrada!");
+			return;
+		}
+
+		Write(" Valor para aumentar: ");
+		var valor = Convert.ToDecimal(ReadLine());
+
+		conta.Limite += valor;
+		CriarRodape("Limite aumentado com sucesso!");
+	}
+	private void DiminuirLimite()
+    {
+		CriarTitulo(_titulo + " - Diminuir Limite");
+		Write(" Numero da conta: ");
+		var numero = Convert.ToInt32(ReadLine());
+		var conta = _banco.Contas.FirstOrDefault(c => c.Numero == numero);
+
+		if (conta == null)
+		{
+			CriarRodape("Conta não encontrada!");
+			return;
+		}
+
+		Write(" Valor para diminuir: ");
+		var valor = Convert.ToDecimal(ReadLine());
+
+		if (valor <= conta.Limite)
+		{
+			conta.Limite -= valor;
+			CriarRodape("Limite diminuído com sucesso!");
+		}
+		else
+		{
+			CriarRodape("Valor maior que o limite atual!");
+		}
+	}
+	private void CriarLinha()
     {
         WriteLine("-------------------------------------------------");
     }

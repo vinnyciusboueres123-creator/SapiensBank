@@ -8,7 +8,10 @@ public class Conta
     public string Senha { get; set; }
     public decimal Saldo { get; set; }
     public decimal Limite { get; set; }
-
+    public decimal Saque { get; set; }
+    public decimal Deposito { get; set; }
+    public decimal SaldoDisponivel { get; set; }
+    
     [JsonIgnore]
     public decimal SaldoDisponível => Saldo + Limite;
 
@@ -19,5 +22,15 @@ public class Conta
         Cpf = cpf;
         Senha = senha;
         Limite = limite;
+    }
+    public Conta(decimal saque, decimal deposito, decimal saldoDisponivel)
+    {
+        Saque = saque;
+        Deposito = deposito;
+        SaldoDisponivel = saldoDisponivel;
+
+        Cliente = string.Empty;
+        Cpf = string.Empty;
+        Senha = string.Empty;
     }
 }
